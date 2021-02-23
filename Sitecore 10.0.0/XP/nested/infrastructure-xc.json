@@ -566,6 +566,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').refDataSqlDataBase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[variables('refDataSqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').refDataSqlDataBase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').refDataSqlDataBase.ServiceObjectiveLevel]"
@@ -645,6 +646,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').shardMapManagerSqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').shardMapManagerSqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').shardMapManagerSqlDatabase.ServiceObjectiveLevel]"
@@ -674,6 +676,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').xcShard0SqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').xcShard0SqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard0SqlDatabase.ServiceObjectiveLevel]"
@@ -703,6 +706,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').xcShard1SqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').xcShard1SqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard1SqlDatabase.ServiceObjectiveLevel]"
