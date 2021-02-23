@@ -232,6 +232,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').processingEngineTasksSqlDataBase.ServiceObjectiveLevel]"
@@ -261,6 +262,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').processingEngineStorageSqlDataBase.ServiceObjectiveLevel]"
@@ -290,6 +292,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').reportingSqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').reportingSqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').reportingSqlDatabase.ServiceObjectiveLevel]"
