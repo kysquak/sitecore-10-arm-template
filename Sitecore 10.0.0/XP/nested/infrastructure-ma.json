@@ -154,6 +154,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').maSqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').maSqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').maSqlDatabase.ServiceObjectiveLevel]"
