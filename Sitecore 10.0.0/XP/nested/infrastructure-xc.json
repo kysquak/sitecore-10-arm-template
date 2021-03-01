@@ -12,7 +12,6 @@
     "shard0SqlDatabaseNameTidy": "[toLower(trim(parameters('shard0SqlDatabaseName')))]",
     "shard1SqlDatabaseNameTidy": "[toLower(trim(parameters('shard1SqlDatabaseName')))]",
     "refDataSqlDatabaseNameTidy": "[toLower(trim(parameters('refDataSqlDatabaseName')))]",
-    "messagingSqlDatabaseNameTidy": "[toLower(trim(parameters('messagingSqlDatabaseName')))]",
     "refDataSqlDatabaseCollation": "Latin1_General_CS_AS",
 
     "xcHostingPlanNameTidy": "[toLower(trim(parameters('xcHostingPlanName')))]",
@@ -102,11 +101,7 @@
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-    "messagingSqlDatabaseName": {
-      "type": "string",
-      "minLength": 1,
-      "defaultValue": "[concat(parameters('deploymentId'), '-messaging-db')]"
-    },
+
     "shardMapManagerSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -212,11 +207,6 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S0"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         },
         "Small": {
@@ -255,11 +245,6 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S1"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         },
         "Medium": {
@@ -298,11 +283,6 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S2"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         },
         "Large": {
@@ -341,11 +321,6 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S2"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         },
         "Extra Large": {
@@ -384,11 +359,6 @@
             "Edition": "Premium",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "P1"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         },
         "2x Large": {
@@ -427,11 +397,6 @@
             "Edition": "Premium",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "P2"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         },
         "3x Large": {
@@ -470,11 +435,6 @@
             "Edition": "Premium",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "P2"
-          },
-          "messagingSqlDatabase": {
-            "Edition": "Standard",
-            "MaxSize": "268435456000",
-            "ServiceObjectiveLevel": "S0"
           }
         }
       }
@@ -606,6 +566,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').refDataSqlDataBase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[variables('refDataSqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').refDataSqlDataBase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').refDataSqlDataBase.ServiceObjectiveLevel]"
@@ -685,6 +646,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').shardMapManagerSqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').shardMapManagerSqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').shardMapManagerSqlDatabase.ServiceObjectiveLevel]"
@@ -714,6 +676,7 @@
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').xcShard0SqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').xcShard0SqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard0SqlDatabase.ServiceObjectiveLevel]"
@@ -738,40 +701,12 @@
     },
     {
       "type": "Microsoft.Sql/servers/databases",
-      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('messagingSqlDatabaseNameTidy'))]",
-      "location": "[parameters('location')]",
-      "apiVersion": "[variables('dbApiVersion')]",
-      "properties": {
-        "edition": "[parameters('resourceSizes').messagingSqlDataBase.Edition]",
-        "collation": "[parameters('sqlDatabaseCollation')]",
-        "maxSizeBytes": "[parameters('resourceSizes').messagingSqlDataBase.MaxSize]",
-        "requestedServiceObjectiveName": "[parameters('resourceSizes').messagingSqlDataBase.ServiceObjectiveLevel]"
-      },
-      "resources": [
-        {
-          "name": "current",
-          "type": "transparentDataEncryption",
-          "dependsOn": [
-            "[variables('messagingSqlDatabaseNameTidy')]"
-          ],
-          "apiVersion": "2014-04-01",
-          "properties": {
-            "status": "Enabled"
-          }
-        }
-      ],
-      "tags": {
-        "provider": "[variables('sitecoreTags').provider]",
-        "logicalName": "[variables('sitecoreTags').messaging]"
-      }
-    },
-    {
-      "type": "Microsoft.Sql/servers/databases",
       "name": "[concat(variables('sqlServerNameTidy'),'/',variables('shard1SqlDatabaseNameTidy'))]",
       "location": "[parameters('location')]",
       "apiVersion": "[variables('dbApiVersion')]",
       "properties": {
         "edition": "[parameters('resourceSizes').xcShard1SqlDatabase.Edition]",
+        "storageAccountType": "ZRS",
         "collation": "[parameters('sqlDatabaseCollation')]",
         "maxSizeBytes": "[parameters('resourceSizes').xcShard1SqlDatabase.MaxSize]",
         "requestedServiceObjectiveName": "[parameters('resourceSizes').xcShard1SqlDatabase.ServiceObjectiveLevel]"
