@@ -53,7 +53,7 @@
       "forms": "forms",
       "exmmaster" : "exmmaster"
     },
-    "redisSubnetId": "[resourceId(parameters('redisVirtualNetworkResourceGroupName'),'Microsoft.Network/virtualNetworks/subnets', parameters('redisVirtualNetworkName'), parameters('redisSubnetName'))]",
+
     "useAse": "[not(empty(parameters('aseName')))]",
     "aseResourceId": "[resourceId(parameters('aseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('aseName'))]",
     "dmzAseResourceId": "[resourceId(parameters('dmzAseResourceGroupName'), 'Microsoft.Web/hostingEnvironments', parameters('dmzAseName'))]",
@@ -126,25 +126,7 @@
         "description": "Sitecore SKU controls the sizes and service levels of the provisioned resources"
       }
     },
-    "redisVirtualNetworkResourceGroupName": {
-      "type": "string",
-      "defaultValue": "[resourceGroup().name]",
-      "metadata": {
-        "description": "The resource group of the existing Virtual Network."
-      }
-    },
-    "redisVirtualNetworkName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the existing Virtual Network."
-      }
-    },
-    "redisSubnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the existing subnet."
-      }
-    },
+
     "sqlServerName": {
       "type": "string",
       "minLength": 1,
@@ -1238,6 +1220,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').coreSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').coreSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').coreSqlDatabase.ServiceObjectiveLevel]"
@@ -1268,6 +1251,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').masterSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').masterSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').masterSqlDatabase.ServiceObjectiveLevel]"
@@ -1298,6 +1282,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').webSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').webSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').webSqlDatabase.ServiceObjectiveLevel]"
@@ -1328,6 +1313,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').poolsSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').poolsSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').poolsSqlDatabase.ServiceObjectiveLevel]"
@@ -1358,6 +1344,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').tasksSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').tasksSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').tasksSqlDatabase.ServiceObjectiveLevel]"
@@ -1388,6 +1375,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').formsSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').formsSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').formsSqlDatabase.ServiceObjectiveLevel]"
@@ -1418,6 +1406,7 @@
           "apiVersion": "[variables('dbApiVersion')]",
           "properties": {
             "edition": "[parameters('resourceSizes').exmMasterSqlDatabase.Edition]",
+	    "storageAccountType": "ZRS",
             "collation": "[parameters('sqlDatabaseCollation')]",
             "maxSizeBytes": "[parameters('resourceSizes').exmMasterSqlDatabase.MaxSize]",
             "requestedServiceObjectiveName": "[parameters('resourceSizes').exmMasterSqlDatabase.ServiceObjectiveLevel]"
@@ -1473,8 +1462,7 @@
           "family": "[parameters('resourceSizes').redisCache.SkuFamily]",
           "capacity": "[parameters('resourceSizes').redisCache.SkuCapacity]"
         },
-        "enableNonSslPort": false,
-        "subnetId": "[variables('redisSubnetId')]"
+        "enableNonSslPort": false
       },
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
