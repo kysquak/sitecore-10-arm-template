@@ -12,6 +12,7 @@
     "shard0SqlDatabaseNameTidy": "[toLower(trim(parameters('shard0SqlDatabaseName')))]",
     "shard1SqlDatabaseNameTidy": "[toLower(trim(parameters('shard1SqlDatabaseName')))]",
     "refDataSqlDatabaseNameTidy": "[toLower(trim(parameters('refDataSqlDatabaseName')))]",
+    "messagingSqlDatabaseNameTidy": "[toLower(trim(parameters('messagingSqlDatabaseName')))]",
     "refDataSqlDatabaseCollation": "Latin1_General_CS_AS",
 
     "xcHostingPlanNameTidy": "[toLower(trim(parameters('xcHostingPlanName')))]",
@@ -101,7 +102,11 @@
       "minLength": 1,
       "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
-
+    "messagingSqlDatabaseName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-messaging-db')]"
+    },
     "shardMapManagerSqlDatabaseName": {
       "type": "string",
       "minLength": 1,
@@ -207,6 +212,11 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S0"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         },
         "Small": {
@@ -245,6 +255,11 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S1"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         },
         "Medium": {
@@ -283,6 +298,11 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S2"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         },
         "Large": {
@@ -321,6 +341,11 @@
             "Edition": "Standard",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "S2"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         },
         "Extra Large": {
@@ -359,6 +384,11 @@
             "Edition": "Premium",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "P1"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         },
         "2x Large": {
@@ -397,6 +427,11 @@
             "Edition": "Premium",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "P2"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         },
         "3x Large": {
@@ -435,6 +470,11 @@
             "Edition": "Premium",
             "MaxSize": "268435456000",
             "ServiceObjectiveLevel": "P2"
+          },
+          "messagingSqlDatabase": {
+            "Edition": "Standard",
+            "MaxSize": "268435456000",
+            "ServiceObjectiveLevel": "S0"
           }
         }
       }
@@ -697,6 +737,36 @@
       "tags": {
         "provider": "[variables('sitecoreTags').provider]",
         "logicalName": "[variables('sitecoreTags').xcShard0]"
+      }
+    },
+    {
+      "type": "Microsoft.Sql/servers/databases",
+      "name": "[concat(variables('sqlServerNameTidy'), '/', variables('messagingSqlDatabaseNameTidy'))]",
+      "location": "[parameters('location')]",
+      "apiVersion": "[variables('dbApiVersion')]",
+      "properties": {
+        "edition": "[parameters('resourceSizes').messagingSqlDataBase.Edition]",
+        "storageAccountType": "ZRS",
+        "collation": "[parameters('sqlDatabaseCollation')]",
+        "maxSizeBytes": "[parameters('resourceSizes').messagingSqlDataBase.MaxSize]",
+        "requestedServiceObjectiveName": "[parameters('resourceSizes').messagingSqlDataBase.ServiceObjectiveLevel]"
+      },
+      "resources": [
+        {
+          "name": "current",
+          "type": "transparentDataEncryption",
+          "dependsOn": [
+            "[variables('messagingSqlDatabaseNameTidy')]"
+          ],
+          "apiVersion": "2014-04-01",
+          "properties": {
+            "status": "Enabled"
+          }
+        }
+      ],
+      "tags": {
+        "provider": "[variables('sitecoreTags').provider]",
+        "logicalName": "[variables('sitecoreTags').messaging]"
       }
     },
     {
